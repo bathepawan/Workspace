@@ -7,8 +7,14 @@ return getGCD(n2,(n1%n2));
 }
 int main()
 {
-int n1,n2;
+int n1,n2,t;
 printf("Enter numbers: ");
 scanf("%d %d",&n1,&n2);
+	if(n2>n1)
+	{
+	t=n2;
+	n2=n1;
+	n1=t;
+	}
 printf("GCD = %d ",getGCD(n1,n2));
 }
