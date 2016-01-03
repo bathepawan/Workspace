@@ -7,46 +7,68 @@ struct Node *left;
 struct Node *right;
 };
 
+// Function declaration
+
 struct Node *root=NULL;
 struct Node * insertNode(struct Node * node,int d);
 void inorder(struct Node *node);
 void preorder(struct Node *node);
 void postorder(struct Node *node);
+int maxDepth(struct Node *node);
 int size(struct Node *node);
+int getMin(struct Node *node);
+int hasPathSum(struct Node *node,int sum);
 
+
+// Main Function
 int main()
 {
-int choice=0,item;
-//root=(struct Node *)malloc(sizeof(struct Node));
-//root=NULL;
-//root->left=NULL;
-//root->right=NULL;
+int choice=0,item,sum=0;
+
 do{
-	printf("\n Welcome to BST : \n 1.Insert Element \n 2. Inoder \n 3.Preorder \n 4.Postorder \n 5.Size \n 999.Exit");
+	printf("=====================================================================================================================");
+	printf("\n Welcome to BST : \n 1.Insert Element \n 2. Inoder \n 3.Preorder \n 4.Postorder \n 5.Size \n 6.Maximum Depth");
+	printf("\n 7.Minimum Element in Tree \n 8. HasPathOf sum  \n 999.Exit \n Choice?:  ");
 	scanf("%d",&choice);
+	printf("======================================================================================================================");
 	switch(choice)
 	{
 		case 1:
-			printf("Enter Item to be inserted : \n  ");
+			printf("\nEnter Item to be inserted : \n  ");
 			scanf("%d",&item);
 			root=insertNode(root,item);
 		break;
 		case 2:
 			printf("\nInorder Traversal \n");
 			inorder(root);
+			printf("\n");
 		break;
 		case 3:
 			printf("\n Preorder Traversal \n");
 			preorder(root);
+			printf("\n");
 		break;
 		case 4:
 			printf("\n Post Order Traversal \n");
 			postorder(root);
+			printf("\n");
 		break;
 		case 5:
-		printf("Size is %d",size(root));
+			printf("\nSize is %d \n",size(root));
                 break;
-                default:
+                case 6:
+			printf("\n Maxmimum Depth of tree is %d", maxDepth(root));
+		break;
+		case 7:
+			printf("\n Minimum Element is %d \n",getMin(root));
+		case 8:
+			printf("\n Enter Sum :");
+			scanf("%d",&sum);
+			if(hasPathSum(root,sum))
+			printf("\n Has Path with sum =%d \n",sum);
+			else
+			printf("\n No such path exists \n");		
+		default:
                 break;
 
 	}
@@ -54,10 +76,10 @@ do{
 }while(choice!=999);
 }
 
+//Insert Node
 struct Node * insertNode(struct Node *rootnode,int d)
 {
 struct Node *node;
-//rootnode=(struct Node *)malloc(sizeof(struct Node));
 node=(struct Node *)malloc(sizeof(struct Node));
 node->data=d;
 node->left=NULL;
@@ -71,11 +93,10 @@ else
 rootnode->right=insertNode(rootnode->right,d);
 return rootnode;
 }
-
+//Inorder 
 void inorder(struct Node *r)
 {
 struct Node *cur=r;
-//printf("Inorder\n");
 if(cur==NULL) return;
 else{
 	inorder(cur->left);
@@ -84,10 +105,10 @@ else{
     }
 }
 
+//Preorder
 void preorder(struct Node *r)
 {
 struct Node *cur=r;
-//printf("Inorder\n");
 if(cur==NULL) return;
 else{
         printf("%d \t",cur->data);
@@ -96,11 +117,10 @@ else{
     }
 }
 
-
+//Post order
 void postorder(struct Node *r)
 {
 struct Node *cur=r;
-//printf("Inorder\n");
 if(cur==NULL) return;
 else{
         postorder(cur->left);
@@ -111,7 +131,7 @@ else{
 }
 
 
-
+//size
 
 int size(struct Node *r)
 {
@@ -120,4 +140,54 @@ if(r==NULL)
 return 0;
 else
 return (size(r->left)+size(r->right)+1);
+}
+
+
+//max depth
+int maxDepth(struct Node *node)
+{
+int lD=0,rD=0;
+if(node==NULL) return 0;
+else 
+	{
+	lD=maxDepth(node->left);
+	rD=maxDepth(node->right);
+	if(lD>rD) return lD+1;
+	else return rD+1;
+	}
+}
+
+//GetMinimum
+
+int getMin(struct Node *node )
+{
+if(node==NULL) return 0;
+else if(node->left==NULL)
+	return node->data;
+else
+	return getMin(node->left);
+}
+
+
+/*
+Given a tree and a sum, return true if there is a path from the root
+down to a leaf, such that adding up all the values along the path
+equals the given sum.
+http://cslibrary.stanford.edu/110/
+BinaryTrees.html
+Page: 12Binary Trees
+Strategy: subtract the node value from the sum when recurring down,
+and check to see if the sum is 0 when you run out of tree.
+*/
+int hasPathSum(struct Node* node, int sum) {
+// return true if we run out of tree and sum==0
+if (node == NULL) {
+return(sum == 0);
+}
+else {
+// otherwise check both subtrees
+int subSum = sum - node->data;
+return(hasPathSum(node->left, subSum) ||
+hasPathSum(node->right, subSum));
+}
 }
