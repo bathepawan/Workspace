@@ -18,8 +18,63 @@ int maxDepth(struct Node *node);
 int size(struct Node *node);
 int getMin(struct Node *node);
 int hasPathSum(struct Node *node,int sum);
+//Mirror
 
-
+void mirror(struct Node* node) {
+if (node==NULL) {
+return;
+}
+else {
+struct Node* temp;
+// do the subtrees
+mirror(node->left);
+mirror(node->right);
+// swap the pointers in this node
+temp = node->left;
+node->left = node->right;
+node->right = temp;
+}
+}
+/*
+Returns true if a binary tree is a binary search tree.
+*/
+/*
+int isBST(struct node* node) {
+if (node==NULL) return(1);
+// false if the min of the left is > than us
+if (node->left!=NULL && minValue(node->left) > node->data)
+return(0);
+// false if the max of the right is <= than us
+if (node->right!=NULL && maxValue(node->right) <= node->data)
+return(0);
+// false if, recursively, the left or right is not a BST
+if (!isBST(node->left) || !isBST(node->right))
+return(0);
+// passing all that, it's a BST
+return(true);
+}
+*/
+/*
+**
+Given two trees, return true if they are
+structurally identical.
+*/
+/*
+int sameTree(struct node* a, struct node* b) {
+// 1. both empty -> true
+if (a==NULL && b==NULL) return(true);
+// 2. both non-empty -> compare them
+else if (a!=NULL && b!=NULL) {
+return(
+a->data == b->data &&
+sameTree(a->left, b->left) &&
+sameTree(a->right, b->right)
+);
+}
+// 3. one empty, one not -> false
+else return(false);
+}
+*/
 // Main Function
 int main()
 {
@@ -68,6 +123,10 @@ do{
 			printf("\n Has Path with sum =%d \n",sum);
 			else
 			printf("\n No such path exists \n");		
+		case 9:
+			mirror(root);
+			printf("Tree Mirrored and Inorder is :");
+			inorder(root);
 		default:
                 break;
 
